@@ -108,18 +108,35 @@ def process_document(path):
 
 
 # ---------------- STREAMLIT UI ---------------- #
+st.set_page_config(
+    page_title="ContextAgent AI",
+    page_icon="📄",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
+st.markdown("""
+<style>
+
+.stApp {
+    background-color: #0E1117;
+    color: white;
+}
+
+</style>
+""", unsafe_allow_html=True)
 st.title("📄 ContextAgent AI")
 
 # Upload PDFs
 if not st.session_state.document_uploaded:
 
-   uploaded = st.file_uploader(
+    uploaded = st.file_uploader(
         label="Upload PDF Files",
         type=["pdf"],
         accept_multiple_files=True,
         key="pdf_uploader"
-   )
+    )
+
     if uploaded:
 
         with st.spinner("Processing PDFs..."):
@@ -185,106 +202,5 @@ if st.session_state.document_uploaded and st.session_state.agent:
             {
                 "role": "assistant",
                 "content": response
-            }
-        )
-
-
-# ---------------- STREAMLIT UI ---------------- #
-
-# st.title("📄 AI PDF RAG Chatbot")
-st.title("📄 ContextAgent AI")
-
-# Upload PDFs
-if not st.session_state.document_uploaded:
-
-    uploaded = st.file_uploader(
-        label="Upload PDF Files",
-        type=["pdf"],
-        accept_multiple_files=True
-    )
-
-    if uploaded:
-
-        with st.spinner("Processing PDFs..."):
-
-            path = "./doc_files/"
-
-            # Create folder
-            os.makedirs(path, exist_ok=True)
-
-            # Save uploaded PDFs
-            for file in uploaded:
-
-                file_path = os.path.join(path, file.name)
-
-                with open(file_path, "wb") as f:
-                    f.write(file.getvalue())
-
-            # Process docs
-            process_document(path)
-
-            st.success("Documents processed successfully!")
-
-            st.rerun()
-
-
-# ---------------- CHAT UI ---------------- #
-
-if st.session_state.document_uploaded and st.session_state.agent:
-
-    # Show chat history
-    for message in st.session_state.messages:
-
-        role = message["role"]
-        content = message["content"]
-
-        st.chat_message(role).markdown(content)
-
-    # Chat input
-    query = st.chat_input(
-        "Ask questions from uploaded PDFs..."
-    )
-
-    if query:
-
-        # Store user message
-        st.session_state.messages.append(
-            {
-                "role": "user",
-                "content": query
-            }
-        )
-
-        st.chat_message("user").markdown(query)
-
-        # AI response
-        with st.spinner("Thinking..."):
-
-            response = st.session_state.agent.invoke(
-                {
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": query
-                        }
-                    ]
-                },
-                {
-                    "configurable": {
-                        "thread_id": "1"
-                    }
-                }
-            )
-
-            answer = response["messages"][-1].content
-
-        # Show AI response
-        st.chat_message("ai").markdown(answer)
-
-        # Store response
-        st.session_state.messages.append(
-            {
-                "role": "ai",
-                "content": answer
             }
         )
