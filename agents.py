@@ -99,8 +99,6 @@ def process_document(path):
     agent = initialize_agent(
         tools=[retrieve_context],
         llm=llm,
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-        verbose=True
     )
 
     st.session_state.agent = agent
