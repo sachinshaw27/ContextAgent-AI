@@ -70,7 +70,7 @@ def process_document(path):
 
     # OpenRouter LLM
     llm = ChatOpenAI(
-        model="openai/gpt-oss-20b:free",
+        model="mistralai/mistral-7b-instruct:free",
         openai_api_key=os.getenv("OPENROUTER_API_KEY"),
         openai_api_base="https://openrouter.ai/api/v1",
         temperature=0
