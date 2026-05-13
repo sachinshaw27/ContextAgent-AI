@@ -99,14 +99,16 @@ def process_document(path):
     agent = initialize_agent(
         tools=[retrieve_context],
         llm=llm,
+        agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
+        verbose=True,
+        handle_parsing_errors=True
     )
 
     st.session_state.agent = agent
     st.session_state.document_uploaded = True
 
 
-# ---------------- STREAMLIT UI ---------------- #
-
+# ---------------- CUSTOM CSS ---------------- #
 
 st.markdown("""
 <style>
@@ -118,7 +120,12 @@ st.markdown("""
 
 </style>
 """, unsafe_allow_html=True)
+
+
+# ---------------- STREAMLIT UI ---------------- #
+
 st.title("📄 ContextAgent AI")
+
 
 # Upload PDFs
 if not st.session_state.document_uploaded:
@@ -172,7 +179,7 @@ if st.session_state.document_uploaded and st.session_state.agent:
 
     if query:
 
-        # User Message
+        # Store User Message
         st.session_state.messages.append(
             {
                 "role": "user",
@@ -185,7 +192,20 @@ if st.session_state.document_uploaded and st.session_state.agent:
         # AI Response
         with st.spinner("Thinking..."):
 
-            response = st.session_state.agent.run(query)
+            try:
+
+                response = st.session_state.agent.invoke(query)
+
+                if isinstance(response, dict):
+
+                    response = response.get(
+                        "output",
+                        "No response generated."
+                    )
+
+            except Exception as e:
+
+                response = f"Error: {str(e)}"
 
         # Show Response
         st.chat_message("assistant").markdown(response)
