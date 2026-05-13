@@ -108,12 +108,7 @@ def process_document(path):
 
 
 # ---------------- STREAMLIT UI ---------------- #
-st.set_page_config(
-    page_title="ContextAgent AI",
-    page_icon="📄",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+
 
 st.markdown("""
 <style>
