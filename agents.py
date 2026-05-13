@@ -70,10 +70,11 @@ def process_document(path):
 
     # OpenRouter LLM
     llm = ChatOpenAI(
-        model="mistralai/mistral-7b-instruct:free",
+        model="meta-llama/llama-3.2-3b-instruct:free",
         openai_api_key=os.getenv("OPENROUTER_API_KEY"),
         openai_api_base="https://openrouter.ai/api/v1",
-        temperature=0
+        temperature=0,
+        max_retries=5
     )
 
     # Retrieval Tool
