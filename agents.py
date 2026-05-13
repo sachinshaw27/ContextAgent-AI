@@ -119,7 +119,7 @@ if not st.session_state.document_uploaded:
         type=["pdf"],
         accept_multiple_files=True,
         key="pdf_uploader"
-)
+   )
     if uploaded:
 
         with st.spinner("Processing PDFs..."):
