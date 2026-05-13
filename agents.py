@@ -114,12 +114,12 @@ st.title("📄 ContextAgent AI")
 # Upload PDFs
 if not st.session_state.document_uploaded:
 
-    uploaded = st.file_uploader(
-        label="Upload PDF Files",
-        type=["pdf"],
-        accept_multiple_files=True
-    )
-
+   uploaded = st.file_uploader(
+    label="Upload PDF Files",
+    type=["pdf"],
+    accept_multiple_files=True,
+    key="pdf_uploader"
+)
     if uploaded:
 
         with st.spinner("Processing PDFs..."):
